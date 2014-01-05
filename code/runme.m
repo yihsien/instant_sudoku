@@ -10,7 +10,7 @@ function [] = runme (force_overwrite)
   filenames = dir('../input');
 
   % Keep record of the evaluation results for each input image
-  scores = [];
+  %scores = [];
 
   % Process all filenames in input directory
   for i = 1:size(filenames)
@@ -22,20 +22,15 @@ function [] = runme (force_overwrite)
       % Determine filenames
       basename = strrep(filename, '.jpg', '');
       input_filename = strcat('../input/', basename, '.jpg');
-      canny_filename = strcat('../canny/', basename, '.jpg');
-      hough_filename = strcat('../hough/', basename, '.jpg');
-      stronglines_filename = strcat('../stronglines/', basename, '.jpg');
+      %canny_filename = strcat('../canny/', basename, '.jpg');
+      %hough_filename = strcat('../hough/', basename, '.jpg');
+      %stronglines_filename = strcat('../stronglines/', basename, '.jpg');
       output_filename = strcat('../output/', basename, '.jpg');
-      overlay_filename = strcat('../overlay/', basename, '.jpg');
-      groundtruth_filename = strcat('../groundtruth/', basename, '.jpg');
+      %overlay_filename = strcat('../overlay/', basename, '.jpg');
+      %groundtruth_filename = strcat('../groundtruth/', basename, '.jpg');
     
       % Create output image, if it does not already exist
-      if (force_overwrite || ...
-          ~exist(canny_filename, 'file') || ...
-          ~exist(hough_filename, 'file') || ...
-          ~exist(stronglines_filename, 'file') || ...
-          ~exist(output_filename, 'file') || ...
-          ~exist(overlay_filename, 'file')) 
+      if (force_overwrite || ~exist(output_filename, 'file'))
         disp(['Creating ' output_filename]);
 
         % Read the input image
@@ -59,11 +54,14 @@ function [] = runme (force_overwrite)
 
         % Combine Canny and Hough into final output
         output_image = predictlines( canny_image, hough_transform, xgradient_image, ygradient_image, 1.0, 1.0, 2.0 );
+        
+       
       
         % End timer
         toc
       
         % Evaluate the output image by computing the correlation with the groundtruth image   
+        %{
         score = 0;
         if (exist(groundtruth_filename, 'file'))
           groundtruth_image = imread(groundtruth_filename);
@@ -72,16 +70,17 @@ function [] = runme (force_overwrite)
           disp(score)
         end
         scores = [scores; score];
+        %}
 
         % Write the computed images
-        imwrite(visualnormalize(canny_image), canny_filename);
-        imwrite(visualnormalize(hough_transform), hough_filename);
-        %imwrite(output_image, output_filename);
-        imwrite(visualnormalize(output_image), output_filename);
+        %imwrite(visualnormalize(canny_image), canny_filename);
+        %imwrite(visualnormalize(hough_transform), hough_filename);
+        imwrite(output_image, output_filename);
+        %imwrite(visualnormalize(output_image), output_filename);
       
         % Write an image that shows the strong lines (without scaling by the Canny edges or dot products)
-        stronglines_image = predictlines(canny_image, hough_transform, xgradient_image, ygradient_image, 0.0, 1.0, 0.0);
-        imwrite(visualnormalize(stronglines_image), stronglines_filename);
+        %stronglines_image = predictlines(canny_image, hough_transform, xgradient_image, ygradient_image, 0.0, 1.0, 0.0);
+        %imwrite(visualnormalize(stronglines_image), stronglines_filename);
 
         %imwrite(stronglines_image, stronglines_filename);
 
@@ -91,6 +90,8 @@ function [] = runme (force_overwrite)
         output_image = im2double(imread(output_filename));
 
         % Evaluate the result by computing the correlation with the groundtruth image      
+        
+        %{
         score = 0;
         if (exist(groundtruth_filename, 'file'))
           groundtruth_image = imread(groundtruth_filename);
@@ -98,9 +99,12 @@ function [] = runme (force_overwrite)
           score = evaluate(output_image, groundtruth_image);      
         end
         scores = [scores; score];
+        %}
       end
     
       % Create overlay image, if it does not already exist
+      
+      %{
       if (~exist(overlay_filename, 'file'))
         disp(['Creating ' overlay_filename]);
       
@@ -127,7 +131,8 @@ function [] = runme (force_overwrite)
           imwrite(overlay_image, overlay_filename);
         end
       end
-    
+      %}
+      
     end
   end
 
