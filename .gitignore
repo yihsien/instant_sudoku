@@ -1,5 +1,6 @@
 # ignore output files
 output/*
+!output/README.txt	# keep README, ignore everything else
 
 # OS generated files
 .DS_Store
