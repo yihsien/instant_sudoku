@@ -1,0 +1,7 @@
+function [ class ] = dspredict( splitR, splitC, label0, label1, ex )
+if ex(splitR, splitC) == 0
+    class = label
+end
+
+end
+

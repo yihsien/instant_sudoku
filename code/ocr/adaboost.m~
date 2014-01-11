@@ -1,0 +1,42 @@
+function [ alpha, dsmat ] = adaboost( train_data, labels )
+alpha = zeros(1, 200);
+dsmat = zeros(200, 4);
+
+[r, c, num_trainex] = size(train_data);
+
+weights = ones(1, num_trainex);
+weights = weights * (1.0/num_trainex);
+
+for t = 1 : 200
+    [ error, splitR, splitC, label0, label1 ] = decision_stump( train_data, labels, weights );
+    
+    dsmat(t, 1) = split
+end
+    	
+    	for (int t = 0; t < 200; t++) {
+    		DecisionStumpClassifier ds = new DecisionStumpClassifier(d, weights);
+    		dsArray[t] = ds;
+    		double e = ds.getError();
+    		alpha[t] = 0.5 * Math.log((1-e)/e);
+    		
+    		for(int i = 0; i < d.numTrainExs; i++) {
+        		if (ds.predict(d.trainEx[i]) == d.trainLabel[i]) {
+        			weights[i] = weights[i] * Math.exp(-alpha[t]);
+        		} else {
+        			weights[i] = weights[i] * Math.exp(alpha[t]);
+        		}
+        	}
+    		
+    		double sum = 0.0;
+    		for(int i = 0; i < d.numTrainExs; i++) {
+        		sum = sum + weights[i];
+        	}
+    		
+    		for(int i = 0; i < d.numTrainExs; i++) {
+        		weights[i] = weights[i] / sum;
+        	}
+    	}
+
+
+end
+

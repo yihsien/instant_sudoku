@@ -21,6 +21,8 @@ for cnt = 1 : numel(stat)
         maxsquare = bb;
     end
 end
+cropped_img = imcrop(bw, maxsquare);
+%{
 figure('visible', 'off'), imshow(bw, 'Border', 'tight');
 hold on;
 rectangle('position',maxsquare,'edgecolor','r','linewidth',2);
@@ -28,6 +30,7 @@ hold off;
 f = getframe(gca);
 [X, map] = frame2im(f);
 output_img = X;
-
+%}
+output_img = cropped_img;
 end
 
