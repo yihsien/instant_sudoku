@@ -22,7 +22,6 @@ for cnt = 1 : numel(stat)
     end
 end
 cropped_img = imcrop(bw, maxsquare);
-imshow(cropped_img);
 %{
 figure('visible', 'off'), imshow(bw, 'Border', 'tight');
 hold on;

@@ -17,12 +17,19 @@ function [] = runme (force_overwrite)
     filename = filenames(i).name;
   
     % Check if filename is an image
-    if (~isempty(strfind(filename, '.jpg')))
+    if (~isempty(strfind(filename, '.jpg')) || ~isempty(strfind(filename, '.png')))
     
-      % Determine filenames
-      basename = strrep(filename, '.jpg', '');
-      input_filename = strcat('../../input/', basename, '.jpg');
-      output_filename = strcat('../../output/square_', basename, '.jpg');
+      if (~isempty(strfind(filename, '.jpg')))  
+          % Determine filenames
+          basename = strrep(filename, '.jpg', '');
+          input_filename = strcat('../../input/', basename, '.jpg');
+          output_filename = strcat('../../output/square_', basename, '.jpg');
+      elseif(~isempty(strfind(filename, '.png')))
+          basename = strrep(filename, '.png', '');
+          input_filename = strcat('../../input/', basename, '.png');
+          output_filename = strcat('../../output/square_', basename, '.png');
+      end
+              
     
       % Create output image, if it does not already exist
       if (force_overwrite || ~exist(output_filename, 'file'))
@@ -40,15 +47,9 @@ function [] = runme (force_overwrite)
         
         % adaptive thresholding to convert to bw image
         
-        bw = adaptivethreshold(input_image, 11, 0.03);
+        bw = adaptivethreshold(input_image, 15, 0.06);
         output_image = findsquare(bw);
   
-        % Compute gradients
-%        [xgradient_image, ygradient_image] = computegradients ( input_image );
-
-        % Combine Canny and Hough into final output
-%        output_image = predictlines( canny_image, hough_transform, xgradient_image, ygradient_image, 1.0, 1.0, 2.0 );
-
         % End timer
         toc
       
