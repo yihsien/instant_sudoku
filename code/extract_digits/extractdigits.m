@@ -16,11 +16,11 @@ window_height = floor(height/9);
 window_width = floor(width/9);
 
 
-digit_images = [];
+digit_images = {};
 digit_location = [];
 
-location = 0;
-
+location = 1;
+count = 0;
 for grid_h=2:window_height:(height-window_height)
     for grid_w=2:window_width:(width-window_width)
         pixel_sum = 0;
@@ -37,12 +37,16 @@ for grid_h=2:window_height:(height-window_height)
         
         %If the total amount of black pixel exceeds a certain portion, then
         %count that window as containing digit
+
+        
         if(pixel_sum > (window_height*window_width/7))
+            count = count + 1;
             digit_image = imcrop(binary_image, ...
                           [grid_w, grid_h, window_width, window_height]);
                       
             %imshow(digit_image,'Border', 'tight');
-            digit_images = [digit_images, digit_image];
+            digit_images{1,count} = digit_image;
+            %digit_images = [digit_images, [digit_image]];
             digit_location = [digit_location, location];
         end
         
@@ -56,6 +60,9 @@ field1 = 'digit_vector'; value1 = digit_images;
 field2 = 'location_vector'; value2 = digit_location;
 
 output_struct = struct(field1, value1, field2, value2);
+
+%imshow(digit_images{1,1});
+
 
 end
 
