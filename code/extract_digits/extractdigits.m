@@ -5,13 +5,17 @@ function [ output_struct ] = extractdigits( sudoku_image )
 
 %Turn image into gray scale
 gray_image = rgb2gray(sudoku_image);
+
 %Set the threshold level
 level = graythresh(gray_image);
+
 %Convert whole image matrix to binary
 binary_image = im2bw(gray_image, level);
 
 %Determine the window size
 [height, width] = size(gray_image);
+
+
 window_height = floor(height/9);
 window_width = floor(width/9);
 
@@ -56,12 +60,15 @@ for grid_h=2:window_height:(height-window_height)
 end
 
 %Construct the struct for return
-field1 = 'digit_vector'; value1 = digit_images;
+value1 = digit_images;
 field2 = 'location_vector'; value2 = digit_location;
 
-output_struct = struct(field1, value1, field2, value2);
+output_struct = struct(field2, value2);
+output_struct.digit_vector = value1;
 
 %imshow(digit_images{1,1});
+%disp(digit_location);
+
 
 
 end
