@@ -10,30 +10,33 @@ function [ output_img ] = rectify( input_img )
 [x2, y2] = find_corner_point(input_img, 'top-right');
 [x3, y3] = find_corner_point(input_img, 'bottom-left');
 [x4, y4] = find_corner_point(input_img, 'bottom-right');
-
+%{
 figure,imshow(input_img); hold on;
 plot(x1,y1,'r.','MarkerSize',20);
 plot(x2,y2,'r.','MarkerSize',20);
 plot(x3,y3,'r.','MarkerSize',20);
 plot(x4,y4,'r.','MarkerSize',20);
 hold off;
-
-%{
+%}
 x = [x1, x2, x3, x4];
 y = [y1, y2, y3, y4];
-before = [x', y'];
+movingPoints = [x', y'];
 
-length = max(size(input_img));
-[w, h] = size(input_img);
-%after = [ [1, length, 1, length]', [1, 1, length, length]'];
-after = [ [1, w, 1, w]', [1, 1, h, h]'];
+[h, w] = size(input_img);
+fixedPoints = [ [1, w, 1, w]', [1, 1, h, h]'];
 
-tform = cp2tform(before, after, 'projective');
+tform = fitgeotrans(movingPoints, fixedPoints, 'projective');
 
-output_img = imtransform(input_img, tform);
-imshow(output_img);
-%}
-output_img = 0;
+% dilate image before transforming. Otherwise digits become too thin
+se = strel('square', 2);
+dill_img = imdilate(~input_img, se);
+dill_img = ~dill_img;
+
+% transform and then crop image to original size
+tform_img = imwarp(dill_img, tform);
+cropped_img = imcrop(tform_img, [max(x1, x3), max(y1, y2), w, h]);
+
+output_img = cropped_img;
 end
 
 
@@ -130,6 +133,7 @@ case 'bottom-left'
             break_type = 'v';
             break;
         elseif (sum(hline) < side_length)
+            break_type = 'h';
             break;
         end
         corner_x = corner_x + 1;

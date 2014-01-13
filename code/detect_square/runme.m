@@ -36,7 +36,6 @@ function [] = runme (force_overwrite)
         disp(['Creating ' output_filename]);
 
         % Read the input image
-
         input_image = imread(input_filename);
         if (size(input_image, 3) == 3) 
           input_image = rgb2gray(input_image);
@@ -46,10 +45,10 @@ function [] = runme (force_overwrite)
         tic
         
         % adaptive thresholding to convert to bw image
-        
         bw = adaptivethreshold(input_image, 15, 0.06);
-        output_image = findsquare(bw);
-        rectify(output_image);
+        sudoku_square = findsquare(bw);
+        rectified_square = rectify(sudoku_square);
+        output_image = rectified_square;
   
         % End timer
         toc
