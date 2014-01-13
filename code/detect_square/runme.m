@@ -49,6 +49,7 @@ function [] = runme (force_overwrite)
         
         bw = adaptivethreshold(input_image, 15, 0.06);
         output_image = findsquare(bw);
+        rectify(output_image);
   
         % End timer
         toc
