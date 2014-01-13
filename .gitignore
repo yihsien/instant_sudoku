@@ -1,6 +1,8 @@
 # ignore output files
-output/*
-!output/README.txt	# keep README, ignore everything else
+output/*.jpg
+output/*.png
+output/*/*.jpg
+output/*/*.png
 
 # OS generated files
 .DS_Store

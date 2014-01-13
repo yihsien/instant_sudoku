@@ -23,11 +23,11 @@ function [] = runme (force_overwrite)
           % Determine filenames
           basename = strrep(filename, '.jpg', '');
           input_filename = strcat('../../input/', basename, '.jpg');
-          output_filename = strcat('../../output/square_', basename, '.jpg');
+          output_filename = strcat('../../output/extracted_squares/square_', basename, '.jpg');
       elseif(~isempty(strfind(filename, '.png')))
           basename = strrep(filename, '.png', '');
           input_filename = strcat('../../input/', basename, '.png');
-          output_filename = strcat('../../output/square_', basename, '.png');
+          output_filename = strcat('../../output/extracted_squares/square_', basename, '.png');
       end
               
     
