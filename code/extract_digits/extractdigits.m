@@ -67,18 +67,28 @@ for grid_h=1:window_height:(height-window_height+1)
                 if (dist == 0)
                     dist = 1;
                 end
-                allblack_sum = allblack_sum + 1/power(dist,2);
+                if (dist > inner_h / 6)
+                    allblack_sum = allblack_sum + 1/dist;
+                end
                 if(inner_rectangle(window_h, window_w) == 0)
-                    pixel_sum = pixel_sum + 1/(power(dist,2));
+                    if (dist > inner_h /6)
+                        pixel_sum = pixel_sum + 1/dist;
+                    else
+                        pixel_sum = pixel_sum + 1;
+                    end
                 end
             end
         end
         %If the total amount of black pixel exceeds a certain portion, then
         %count that window as containing digit
-        
+        if (location == 8 || location == 9)
+            imshow(inner_rectangle);
+            disp(pixel_sum);
+            disp(allblack_sum);
+        end
         if(pixel_sum > ((allblack_sum)/10))
             count = count + 1;  
-            %imshow(digit_image,'Border', 'tight');
+            %imshow(inner_rectangle,'Border', 'tight');
             digit_images{1,count} = inner_rectangle;
             %digit_images = [digit_images, [digit_image]];
             digit_location = [digit_location, location];
