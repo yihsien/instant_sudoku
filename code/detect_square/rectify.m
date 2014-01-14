@@ -10,14 +10,14 @@ function [ output_img ] = rectify( input_img )
 [x2, y2] = find_corner_point(input_img, 'top-right');
 [x3, y3] = find_corner_point(input_img, 'bottom-left');
 [x4, y4] = find_corner_point(input_img, 'bottom-right');
-%{
+
 figure,imshow(input_img); hold on;
 plot(x1,y1,'r.','MarkerSize',20);
 plot(x2,y2,'r.','MarkerSize',20);
 plot(x3,y3,'r.','MarkerSize',20);
 plot(x4,y4,'r.','MarkerSize',20);
 hold off;
-%}
+
 x = [x1, x2, x3, x4];
 y = [y1, y2, y3, y4];
 movingPoints = [x', y'];
