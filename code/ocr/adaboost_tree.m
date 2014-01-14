@@ -14,7 +14,7 @@ for t = 1 : 200
     
     error = err_rate(tree, train_data, labels, weights);
     
-    alpha(1, t) = 0.5 * log((1-error)/error) + log(8);
+    alpha(1, t) = 0.5 * log((1-error)/error);
     
     for i = 1 : num_trainex
         if predict(tree, train_data(i, :)) == labels(i, 1)

@@ -1,0 +1,5 @@
+function [ test_data ] = create_test_data( filename )
+im = imread(filename);
+str = 
+end
+

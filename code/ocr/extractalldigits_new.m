@@ -62,13 +62,13 @@ binary_image = im2bw(gray_image, level);
     end
     
     set(gca,'position',[0 0 1 1],'units','normalized');
-    output_filename = strcat('../../output/extracted_digits/digits_', filename, '.jpg');
-    print(fig, '-djpeg', '-r300', output_filename);
+    %output_filename = strcat('../../output/extracted_digits/digits_', filename, '.jpg');
+    %print(fig, '-djpeg', '-r300', output_filename);
 
 
     %Construct the struct for return
     output_struct.digit_vector = digit_images;
-    output_struct.location_vector = digit_location
+    output_struct.location_vector = digit_location;
 
 end
 

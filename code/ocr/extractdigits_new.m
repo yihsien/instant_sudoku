@@ -1,18 +1,13 @@
-function [ output_struct ] = extractalldigits_new( sudoku_image )
+function [ output_struct ] = extractdigits_new( sudoku_image, filename )
 %Takes a clean sudoku image and extract the digit portion
+%   input sudoku_image should be a binary image!
+%   filename is the original image's filename without extension.
 %   The output is a struct with the digit image vector and the 
 %   location vector
 
-%Turn image into gray scale
-gray_image = rgb2gray(sudoku_image);
+    binary_image = sudoku_image;
 
-%Set the threshold level
-level = graythresh(gray_image);
-
-%Convert whole image matrix to binary
-binary_image = im2bw(gray_image, level);
-
-%Determine the window size
+    %Determine the window size
     [height, width] = size(binary_image);
 
     window_height = floor(height/9);
@@ -68,7 +63,7 @@ binary_image = im2bw(gray_image, level);
 
     %Construct the struct for return
     output_struct.digit_vector = digit_images;
-    output_struct.location_vector = digit_location
+    output_struct.location_vector = digit_location;
 
 end
 
@@ -194,7 +189,7 @@ function [ret] = contains_digit (square)
     allblack = sum(sum(mask));
     black_pixels = sum(sum(square .* mask));
 
-    if (black_pixels / allblack > 0.00000000001)
+    if (black_pixels / allblack > THRESHOLD_RATIO)
         ret = true;
     else
         ret = false;

@@ -33,9 +33,9 @@ im1 = imread('1.jpg');
 im2 = imread('2.jpg');
 im3 = imread('3.png');
 
-str1 = extractalldigits(im1);
-str2 = extractalldigits(im2);
-str3 = extractalldigits(im3);
+str1 = extractalldigits_new(im1);
+str2 = extractalldigits_new(im2);
+str3 = extractalldigits_new(im3);
 
 num_trainex = 81 * 3;
 
@@ -64,8 +64,8 @@ for i = 163 : 243
     end
 end
 
-disp(size(train_data));
-disp(size(labels));
+%disp(size(train_data));
+%disp(size(labels));
 
 end
 
