@@ -1,8 +1,8 @@
 # ignore output files
 output/*.jpg
 output/*.png
-output/*/*.jpg
-output/*/*.png
+output/extracted_digits/*.jpg
+output/extracted_digits/*.png
 
 # OS generated files
 .DS_Store
