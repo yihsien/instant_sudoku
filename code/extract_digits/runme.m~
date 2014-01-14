@@ -1,0 +1,66 @@
+function [] = runme (force_overwrite)
+  % By default we do not overwrite results
+  if (nargin < 1)
+    force_overwrite = false;
+  end
+
+  close all
+
+  % Get list of all filenames image directory
+  filenames = dir('../../output/extracted_squares');
+
+  % Keep record of the evaluation results for each input image
+  %scores = [];
+
+  % Process all filenames in input directory
+  for i = 1:size(filenames)
+    filename = filenames(i).name;
+  
+    % Check if filename is an image
+    if (~isempty(strfind(filename, '.jpg')) || ~isempty(strfind(filename, '.png')))
+    
+      if (~isempty(strfind(filename, '.jpg')))  
+          % Determine filenames
+          basename = strrep(filename, '.jpg', '');
+          input_filename = strcat('../../output/extracted_squares/', basename, '.jpg');
+          output_filename = strcat('../../output/extracted_digits/square_', basename, '.jpg');
+      elseif(~isempty(strfind(filename, '.png')))
+          basename = strrep(filename, '.png', '');
+          input_filename = strcat('../../output/extracted_squares/', basename, '.png');
+          output_filename = strcat('../../output/extracted_digits/square_', basename, '.png');
+      end
+              
+    
+      % Create output image, if it does not already exist
+      if (force_overwrite || ~exist(output_filename, 'file'))
+        disp(['Creating ' output_filename]);
+
+        % Read the input image
+        input_image = imread(input_filename);   % should be a gray image
+
+        % Begin timer
+        tic
+        
+        % adaptive thresholding to convert to bw image
+        img = im2bw(input_image);
+        
+        sudoku_square = findsquare(bw);
+        rectified_square = rectify(sudoku_square);
+        output_image = rectified_square;
+  
+        % End timer
+        toc
+      
+        % Write the computed images
+        imwrite(output_image, output_filename);
+      else
+        
+        % Read the previously computed output image
+%        output_image = im2double(imread(output_filename));
+
+      end
+
+      
+    end
+  end
+end
