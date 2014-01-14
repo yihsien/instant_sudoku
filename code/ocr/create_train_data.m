@@ -1,4 +1,11 @@
 function [ train_data, labels ] = create_train_data( )
+%function creates train_data and labels using 1.jpg, 2.jpg and 3.jpg in the
+%directory
+
+%train_data: Each column of train_data represents one variable, and each row represents one observation.
+%labels: A numeric column vector with the same number of rows as train_Data. Each entry in labels is the response to the data in the corresponding row of train_data.
+
+%labels are labeled by hand
 labels = [3 5 7 9 6 4 2 8 1 ...
 4 6 8 1 2 3 5 7 9 ...
 9 1 2 5 8 7 4 6 3 ...
@@ -29,20 +36,24 @@ labels = [3 5 7 9 6 4 2 8 1 ...
 
 labels = labels';
 
+%read in the images
 im1 = imread('1.jpg');
 im2 = imread('2.jpg');
 im3 = imread('3.png');
 
-str1 = extractalldigits(im1);
-str2 = extractalldigits(im2);
-str3 = extractalldigits(im3);
+%extract digits in the images
+str1 = extractalldigits_new(im1);
+str2 = extractalldigits_new(im2);
+str3 = extractalldigits_new(im3);
 
 num_trainex = 81 * 3;
 
+%each image of a digit would be resized to 10*10
 imsize = 10;
 
 train_data = zeros(num_trainex, imsize * imsize);
 
+%fill train_data matrix
 for i = 1 : 81
     im = imresize(str1.digit_vector{1, i}, [imsize imsize]);
     for j = 1 : imsize * imsize
@@ -64,8 +75,8 @@ for i = 163 : 243
     end
 end
 
-disp(size(train_data));
-disp(size(labels));
+%disp(size(train_data));
+%disp(size(labels));
 
 end
 
