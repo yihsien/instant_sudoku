@@ -1,6 +1,7 @@
-function [ output_struct ] = extractdigits_new( sudoku_image )
+function [ output_struct ] = extractdigits_new( sudoku_image, filename )
 %Takes a clean sudoku image and extract the digit portion
 %   input sudoku_image should be a binary image!
+%   filename is the original image's filename without extension.
 %   The output is a struct with the digit image vector and the 
 %   location vector
 
@@ -15,8 +16,9 @@ function [ output_struct ] = extractdigits_new( sudoku_image )
     digit_images = {};
     digit_location = [];
 
-%    imshow(sudoku_image);
-%    hold on;
+    fig = figure('Visible', 'Off');
+    imshow(sudoku_image);
+    hold on;
 
     location = 1;   % value from 1~81 to mark which square in sudoku box
     index = 1;      % value from 1 ~ #of squares with digits.
@@ -47,12 +49,17 @@ function [ output_struct ] = extractdigits_new( sudoku_image )
                 % Testing: draw shrinked rectangle in original image
                 r2 = [r1(1,1) + shrinked_rect(1,1) - 1, r1(1,2) + shrinked_rect(1,2) - 1, ...
                     shrinked_rect(1,3), shrinked_rect(1,4)];                
-                %rectangle('position', r2, 'edgecolor', 'g', 'linewidth', 2);
+                rectangle('position', r2, 'edgecolor', 'g', 'linewidth', 2);
             end
 
             location = location + 1;
         end
     end
+    
+    set(gca,'position',[0 0 1 1],'units','normalized');
+    output_filename = strcat('../../output/extracted_digits/digits_', filename, '.jpg');
+    print(fig, '-djpeg', '-r300', output_filename);
+
 
     %Construct the struct for return
     output_struct.digit_vector = digit_images;
@@ -69,7 +76,7 @@ function [output_rectangle] = get_rectangle(window)
 % used for imcrop then. Positions are relative to input "window"
     stat = regionprops(window,'boundingbox');
     maxarea = 0;
-    maxsquare = 0;
+    maxsquare = [1 1 size(window, 2) size(window, 1)];
     for cnt = 1 : numel(stat)
         bb = stat(cnt).BoundingBox;
         area = bb(3) * bb(4);
@@ -78,6 +85,14 @@ function [output_rectangle] = get_rectangle(window)
             maxarea = area;
             maxsquare = bb;
         end
+    end
+    
+    maxsquare = floor(maxsquare);
+    if (maxsquare(1,1) == 0)
+        maxsquare(1,1) = 1;
+    end
+    if (maxsquare(1,2) == 0)
+        maxsquare(1,2) = 1;
     end
     output_rectangle = maxsquare;
 end
@@ -101,7 +116,7 @@ function [output_rectangle] = shrink_rectangle(img)
     % moving top edge down
     y_pos = 1;
     while (1)
-        hline = img(y_pos, h_length:2*h_length-1);
+        hline = img(y_pos, h_length:2*h_length-1);  % horizontal line
         if (sum(hline) == h_length)     % all white
             break;
         end
@@ -160,7 +175,7 @@ function [ret] = contains_digit (square)
     THRESHOLD_RATIO = 0.1;
     [h, w] = size(square);
     
-    square = ~square;   % let black pixels have value 1
+    square = ~square;   % let black pixels have value 1 for summing up
     
     % create a mask by dividing square into 9 regions and have the center
     % region valued at 3 and the remaining at 1.

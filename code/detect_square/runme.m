@@ -55,10 +55,6 @@ function [] = runme (force_overwrite)
       
         % Write the computed images
         imwrite(output_image, output_filename);
-      else
-        
-        % Read the previously computed output image
-%        output_image = im2double(imread(output_filename));
 
       end
 
